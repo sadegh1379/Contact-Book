@@ -1,4 +1,4 @@
-import { ADD_CONTACT , EDIT_CONTACT , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL, ADD_BUTTON} from './Types';
+import { ADD_CONTACT , EDIT_CONTACT , RESET_FILTER , FILTER_BY_NAME , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL, ADD_BUTTON} from './Types';
 
 export const addContact = (contact) => ({
     type: ADD_CONTACT ,
@@ -38,6 +38,18 @@ export const onChangeCheckBox = (id) => ({
     type: ONCHANGE_CHECKBOX,
     payload : id
 })
+
+export const filterByName = (name) => ({
+    type: FILTER_BY_NAME,
+    payload : name
+});
+
+export const resetFilter = () => ({
+    type: RESET_FILTER,
+    
+})
+
+
 
 
 

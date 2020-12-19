@@ -1,5 +1,5 @@
 import { ArrowRightSharp } from '@material-ui/icons';
-import { ADD_CONTACT , EDIT_CONTACT , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL , ADD_BUTTON} from './Types';
+import { ADD_CONTACT , RESET_FILTER, FILTER_BY_NAME , EDIT_CONTACT , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL , ADD_BUTTON} from './Types';
 
 const initialState = {
     contacts : [
@@ -24,7 +24,9 @@ const initialState = {
     ],
     showAddButton : true,
     contact : [],
-    counter : 0
+    counter : 0 ,
+    filter : [] ,
+    filterErr : ''
 }
 
 export const ReducerContact = (state = initialState , action)=>{
@@ -84,8 +86,6 @@ export const ReducerContact = (state = initialState , action)=>{
                 contacts : state.contacts.filter((contact)=>contact.selected === false)
             }
         case ONCHANGE_CHECKBOX:
-            console.log("onchange check run id :" , payload);
-
             return{
                 ...state,
                 contacts : state.contacts.map((contact)=>{
@@ -96,7 +96,23 @@ export const ReducerContact = (state = initialState , action)=>{
                         return contact;
                     }
                 })
+               
+                
             }
+        case FILTER_BY_NAME:
+            const filterCon = state.contacts.filter((contact)=>contact.name === payload);
+            return{
+                ...state,
+                filter : filterCon.length > 0 ? filterCon : [] ,
+                filterErr : filterCon.length > 0 ? "" : "Contact Not Found",
+            }
+        case RESET_FILTER:{
+            return{
+                ...state,
+                filter : [],
+                filterErr : ''
+            }
+        }
             
         default :
             return state;

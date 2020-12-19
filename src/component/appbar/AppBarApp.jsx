@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState , useEffect} from 'react'
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import {Link} from 'react-router-dom';
 import { makeStyles} from '@material-ui/core/styles';
 import {useSelector , useDispatch} from 'react-redux';
-import {addButtonToggle , selectedAll , deleteSelectedContacts} from '../redux/Actions';
+import {addButtonToggle , selectedAll , resetFilter , filterByName , deleteSelectedContacts} from '../redux/Actions';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Paper, TextField } from '@material-ui/core';
 
@@ -46,18 +46,32 @@ const useStyles = makeStyles(()=>({
 function AppBarApp() {
     const dispatch = useDispatch();
     const showAddBtn = useSelector(state => state.showAddButton);
+    const filter = useSelector(state=>state);
     const [show , setShow] = useState(false);
     const classes = useStyles();
 
     const AddBtn = ()=>{
         dispatch(addButtonToggle(false));
     }
+
+    const search = (e)=>{
+      if(e.code === "Enter"){
+        dispatch(filterByName(e.target.value));
+      }
+    }
+
+    useEffect(()=>{
+      if(!show){
+        dispatch(resetFilter());
+      }
+    },[show])
+
     return (
         <AppBar position="fixed" color="primary" className={classes.appBar}>
           {
             show?(
               <Paper className={classes.searchBox} elevation={1} >
-                <TextField  name="name" size="small" variant="outlined" id="standard-basic" label="Enter Name" />
+                <TextField  onKeyPress={(e)=>search(e)}  name="name" size="small" variant="outlined" id="standard-basic" label="Enter Name" />
               </Paper>
             ) : null
           }

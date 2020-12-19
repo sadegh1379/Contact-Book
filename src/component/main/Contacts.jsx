@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 export default function BottomAppBar() {
   const classes = useStyles();
   const allContact = useSelector(state=>state.contacts);
+  const filterContact = useSelector(state=>state.filter);
+  const filterError = useSelector(state=>state.filterErr);
 
   return (
     <React.Fragment>
@@ -61,14 +63,22 @@ export default function BottomAppBar() {
           Contacts
         </Typography><hr/>
         <List dense className={classes.root}>
-        {allContact.length > 0 ? allContact.map((contact , index) => {
+        {
+          filterError.length > 0 ? filterError : 
+          filterContact.length > 0 ? filterContact.map((contact , index) => {
            
             return (
                 <Contact key={index} contact={contact}/>
             );
-        }) :   <Typography className={classes.text} variant="caption" >
-               No Contact Yet
-              </Typography>
+        }) : allContact.length > 0 ? allContact.map((contact , index) => {
+           
+          return (
+              <Contact key={index} contact={contact}/>
+          );
+      }) :   <Typography className={classes.text} variant="caption" >
+             No Contact Yet
+            </Typography>
+        
       }
         </List>
       </Paper>
