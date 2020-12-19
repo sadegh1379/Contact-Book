@@ -1,20 +1,27 @@
-import React from 'react';
+import React  from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import Contact from './Contact';
 import {useSelector} from 'react-redux';
+import { TextField } from '@material-ui/core';
 
 
 
 const useStyles = makeStyles((theme) => ({
-  text: {
+  text1: {
     padding: theme.spacing(2, 2, 0),
+    
+  },
+  text: {
+    padding: theme.spacing(2,20, 0),
+    
   },
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+    textAlign:'center'
   },
   paper: {
     paddingBottom: 50,
@@ -40,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     margin: '0 auto',
   },
+ 
 }));
 
 export default function BottomAppBar() {
@@ -49,16 +57,19 @@ export default function BottomAppBar() {
   return (
     <React.Fragment>
       <Paper square className={classes.paper}>
-        <Typography className={classes.text} variant="h5" gutterBottom>
+        <Typography className={classes.text1} variant="h5" gutterBottom>
           Contacts
         </Typography><hr/>
         <List dense className={classes.root}>
-        {allContact.map((contact , index) => {
+        {allContact.length > 0 ? allContact.map((contact , index) => {
            
             return (
                 <Contact key={index} contact={contact}/>
             );
-        })}
+        }) :   <Typography className={classes.text} variant="caption" >
+               No Contact Yet
+              </Typography>
+      }
         </List>
       </Paper>
     </React.Fragment>

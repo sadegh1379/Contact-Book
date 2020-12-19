@@ -1,5 +1,5 @@
 import { ArrowRightSharp } from '@material-ui/icons';
-import { ADD_CONTACT , EDIT_CONTACT , GET_CONTACT , DELETE_CONTACT , ADD_BUTTON} from './Types';
+import { ADD_CONTACT , EDIT_CONTACT , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL , ADD_BUTTON} from './Types';
 
 const initialState = {
     contacts : [
@@ -59,6 +59,38 @@ export const ReducerContact = (state = initialState , action)=>{
                         contact.id = payload.id;
                         contact.phone = payload.phone;
                         console.log("edit contact : " , contact)
+                        return contact;
+                    }else{
+                        return contact;
+                    }
+                })
+            }
+        case SELECTED_ALL:
+            return{
+                ...state,
+                contacts:state.contacts.map((contact)=>{
+                    contact.selected  = !contact.selected;
+                    return contact 
+                })
+            };
+        case DELETE_CONTACT:
+            return{
+                ...state,
+                contacts : state.contacts.filter((contact)=>contact.id !== payload)
+            }
+        case DELETE_SELECTED_CONTACTS:
+            return{
+                ...state,
+                contacts : state.contacts.filter((contact)=>contact.selected === false)
+            }
+        case ONCHANGE_CHECKBOX:
+            console.log("onchange check run id :" , payload);
+
+            return{
+                ...state,
+                contacts : state.contacts.map((contact)=>{
+                    if(contact.id === payload){
+                        contact.selected = !contact.selected;
                         return contact;
                     }else{
                         return contact;

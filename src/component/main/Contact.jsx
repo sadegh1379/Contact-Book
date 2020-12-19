@@ -9,8 +9,10 @@ import EditIcon from '@material-ui/icons/Edit';
 import Avatar from 'react-avatar';
 import { IconButton } from '@material-ui/core';
 import {Link} from 'react-router-dom';
-import {addButtonToggle} from '../redux/Actions';
+import {addButtonToggle , deleteContact , onChangeCheckBox} from '../redux/Actions';
 import {useDispatch} from 'react-redux';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 const useStyles = makeStyles(()=>({
   bold : {
@@ -49,17 +51,19 @@ function Contact({contact}) {
             <ListItemText  primary={name} />
             <ListItemText   primary={phone} />
             <ListItemSecondaryAction>
+            <IconButton onClick={()=>dispatch(deleteContact(id))} m={2}  edge="end" color="secondary">
+                    <DeleteIcon />
+            </IconButton>
               <Link to={`/edit/${id}`} onClick={()=>dispatch(addButtonToggle(false))}>
                  <IconButton edge="end" color="inherit">
-                  
                    <EditIcon />
                  </IconButton>
               </Link>
             <Checkbox
                 edge="end"
                 onChange={handleToggle(id)}
-                checked={checked.indexOf(id) !== -1}
-                
+                checked={selected}
+                onChange={()=>dispatch(onChangeCheckBox(id))}
             />
             
             </ListItemSecondaryAction>

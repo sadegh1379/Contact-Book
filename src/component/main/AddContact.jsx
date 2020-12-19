@@ -60,7 +60,8 @@ export default function AddContact() {
         const new_contact = {
             id : shortid.generate(),
             name : name,
-            phone : phone
+            phone : phone,
+            selected : false
         }
         dispatch(addContact(new_contact));
         dispatch(addButtonToggle(true));
