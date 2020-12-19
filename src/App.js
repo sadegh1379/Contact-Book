@@ -43,7 +43,7 @@ function App() {
       {/* switch router */}
       <Switch>
           <Route exact path="/" component={Contacts}/>
-          <Route exact path="/edit" component={EditContact}/>
+          <Route exact path="/edit/:id" component={EditContact}/>
           <Route exact path="/add" component={AddContact}/>
       </Switch>
      <AppBarApp/>

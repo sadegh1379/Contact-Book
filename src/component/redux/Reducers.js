@@ -1,3 +1,4 @@
+import { ArrowRightSharp } from '@material-ui/icons';
 import { ADD_CONTACT , EDIT_CONTACT , GET_CONTACT , DELETE_CONTACT , ADD_BUTTON} from './Types';
 
 const initialState = {
@@ -22,7 +23,7 @@ const initialState = {
         },
     ],
     showAddButton : true,
-    contact : {},
+    contact : [],
     counter : 0
 }
 
@@ -38,6 +39,31 @@ export const ReducerContact = (state = initialState , action)=>{
             return{
                 ...state,
                 showAddButton : payload
+            }
+        case GET_CONTACT :
+            let arr = state.contacts.filter((contact)=>contact.id == payload);
+            arr = arr.values();
+            for(let val of arr){
+                arr = val;
+            }
+            return{
+                ...state,
+                contact : arr
+            }
+        case EDIT_CONTACT:
+            return{
+                ...state,
+                contacts : state.contacts.map((contact)=>{
+                    if(contact.id == payload.id){
+                        contact.name = payload.name;
+                        contact.id = payload.id;
+                        contact.phone = payload.phone;
+                        console.log("edit contact : " , contact)
+                        return contact;
+                    }else{
+                        return contact;
+                    }
+                })
             }
             
         default :

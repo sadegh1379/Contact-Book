@@ -49,7 +49,7 @@ function Contact({contact}) {
             <ListItemText  primary={name} />
             <ListItemText   primary={phone} />
             <ListItemSecondaryAction>
-              <Link to="/edit" onClick={()=>dispatch(addButtonToggle(false))}>
+              <Link to={`/edit/${id}`} onClick={()=>dispatch(addButtonToggle(false))}>
                  <IconButton edge="end" color="inherit">
                   
                    <EditIcon />

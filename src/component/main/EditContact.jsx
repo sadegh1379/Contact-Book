@@ -1,13 +1,13 @@
-import React , {useState} from 'react';
+import React , {useState , useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Typography , Paper, Button  } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import {useDispatch} from 'react-redux';
-import {addContact , addButtonToggle} from '../redux/Actions';
+import {useDispatch , useSelector} from 'react-redux';
+import {addContact , addButtonToggle, getContact , editContact} from '../redux/Actions';
 import shortid from 'shortid';
 import {Alert} from '@material-ui/lab';
-import {useHistory} from 'react-router-dom';
+import {useHistory , useParams} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AddContact() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const {id} = useParams();
+  const contact = useSelector(state=>state.contact);
   const [formData , setFormData] = useState({name : '' , phone:''});
   const [showA , setShowA] = useState('');
   const history = useHistory();
@@ -47,6 +49,18 @@ export default function AddContact() {
     
   } 
 
+  useEffect(() => {
+     
+      dispatch(getContact(id));
+      if(contact){
+        setFormData({
+            name : contact.name,
+            phone: contact.phone ,
+        })
+      }
+     
+  }, [contact])
+
   const handleSubmit = (e)=>{
       e.preventDefault();
       const {name , phone} = formData;
@@ -58,15 +72,17 @@ export default function AddContact() {
         setTimeout(()=>setShowA('') , 3000)
       }else{
         const new_contact = {
-            id : shortid.generate(),
+            id : id ,
             name : name,
             phone : phone
         }
-        dispatch(addContact(new_contact));
+        dispatch(editContact(new_contact));
         dispatch(addButtonToggle(true));
         history.push("/")
       }
   }
+
+
 
   
 
@@ -77,8 +93,8 @@ export default function AddContact() {
           Edit Contact
         </Typography><hr/>
             <form onSubmit={handleSubmit} className={classes.root} autoComplete="off">
-            <TextField onChange={(e)=>onChangeData(e)} name="name" className={classes.margin} id="standard-basic" label="Enter Your Name" />
-            <TextField onChange={(e)=>onChangeData(e)}  name="phone"  className={classes.margin} id="standard-basic" label="Enter Your Phone" />
+            <TextField value={formData.name} onChange={(e)=>onChangeData(e)} name="name" className={classes.margin} id="standard-basic" label="Enter Your Name" />
+            <TextField value={formData.phone} onChange={(e)=>onChangeData(e)}  name="phone"  className={classes.margin} id="standard-basic" label="Enter Your Phone" />
             {
                 showA.length > 1 ?(
                     <Alert severity="error">{showA}</Alert>
