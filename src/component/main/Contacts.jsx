@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     
   },
   text: {
-    padding: theme.spacing(2,20, 0),
+    padding: theme.spacing(2,2, 0),
     
   },
   root: {
@@ -55,7 +55,6 @@ export default function BottomAppBar() {
   const allContact = useSelector(state=>state.contacts);
   const filterContact = useSelector(state=>state.filter);
   const filterError = useSelector(state=>state.filterErr);
-
   return (
     <React.Fragment>
       <Paper square className={classes.paper}>
@@ -64,7 +63,7 @@ export default function BottomAppBar() {
         </Typography><hr/>
         <List dense className={classes.root}>
         {
-          filterError.length > 0 ? filterError : 
+          filterError.length > 0 && filterError ? filterError : 
           filterContact.length > 0 ? filterContact.map((contact , index) => {
            
             return (

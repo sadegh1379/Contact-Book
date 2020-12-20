@@ -1,27 +1,18 @@
 import { ArrowRightSharp } from '@material-ui/icons';
 import { ADD_CONTACT , RESET_FILTER, FILTER_BY_NAME , EDIT_CONTACT , ONCHANGE_CHECKBOX , GET_CONTACT , DELETE_CONTACT , DELETE_SELECTED_CONTACTS , SELECTED_ALL , ADD_BUTTON} from './Types';
 
+
+const getInLocalStorage = (itemName)=>{
+    return window.localStorage.getItem(itemName)?JSON.parse(window.localStorage.getItem(itemName)):[]
+ }
+ 
+ const setInLocalStorage = (itemName , item )=>{
+     window.localStorage.setItem(itemName , JSON.stringify(item));
+ }
+
+
 const initialState = {
-    contacts : [
-        {
-            id:1,
-            name:'sadegh',
-            phone : '09376770472',
-            selected : false
-        },
-        {
-            id:2,
-            name:'ali',
-            phone : '09192356855',
-            selected : false
-        },
-        {
-            id:3,
-            name:'ahmad',
-            phone : '09304485214',
-            selected : false
-        },
-    ],
+    contacts : getInLocalStorage('contacts'),
     showAddButton : true,
     contact : [],
     counter : 0 ,
@@ -29,13 +20,18 @@ const initialState = {
     filterErr : ''
 }
 
+
+
 export const ReducerContact = (state = initialState , action)=>{
     const {payload , type } = action;
     switch(type){
         case ADD_CONTACT :
+            const new_contacts = [payload , ...state.contacts];
+            setInLocalStorage('contacts',new_contacts);
+            console.log(new_contacts);
             return{
                 ...state ,
-                contacts : [payload , ...state.contacts]
+                contacts : new_contacts
             }
         case  ADD_BUTTON:
             return{
@@ -53,19 +49,20 @@ export const ReducerContact = (state = initialState , action)=>{
                 contact : arr
             }
         case EDIT_CONTACT:
+            const Edit_contacts = state.contacts.map((contact)=>{
+                if(contact.id == payload.id){
+                    contact.name = payload.name;
+                    contact.id = payload.id;
+                    contact.phone = payload.phone;
+                    return contact;
+                }else{
+                    return contact;
+                }
+            })
+            setInLocalStorage('contacts',Edit_contacts);
             return{
                 ...state,
-                contacts : state.contacts.map((contact)=>{
-                    if(contact.id == payload.id){
-                        contact.name = payload.name;
-                        contact.id = payload.id;
-                        contact.phone = payload.phone;
-                        console.log("edit contact : " , contact)
-                        return contact;
-                    }else{
-                        return contact;
-                    }
-                })
+                contacts : Edit_contacts
             }
         case SELECTED_ALL:
             return{
@@ -76,14 +73,18 @@ export const ReducerContact = (state = initialState , action)=>{
                 })
             };
         case DELETE_CONTACT:
+            const deleteContacts = state.contacts.filter((contact)=>contact.id !== payload);
+            setInLocalStorage('contacts',deleteContacts);
             return{
                 ...state,
-                contacts : state.contacts.filter((contact)=>contact.id !== payload)
+                contacts : deleteContacts
             }
         case DELETE_SELECTED_CONTACTS:
+            const deleteSelected = state.contacts.filter((contact)=>contact.selected === false)
+            setInLocalStorage('contacts',deleteSelected);
             return{
                 ...state,
-                contacts : state.contacts.filter((contact)=>contact.selected === false)
+                contacts : deleteSelected
             }
         case ONCHANGE_CHECKBOX:
             return{
